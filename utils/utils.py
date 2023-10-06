@@ -12,4 +12,4 @@ def clear_ada_cache(model, processor):
     gc.collect()
     # del model
     # gc.disable()
-    return model, processor
+    # return model, processor
