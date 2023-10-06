@@ -1,7 +1,10 @@
 # export PATH="$HOME/.local/bin:$PATH"
-
-
 import streamlit as st
+import gc
+
+gc.enable()
+
+
 
 st.set_page_config(
     page_title="Hello",

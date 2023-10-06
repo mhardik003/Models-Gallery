@@ -7,11 +7,6 @@ from Models.blip import *
 from PIL import Image
 from Utils import *
 
-def clear_ada_cache():
-    """
-    Functoin to clear the model's
-    """
-
 
 
 st.set_page_config(page_title="Katha AI Model Library", layout="wide", page_icon="💻", menu_items={

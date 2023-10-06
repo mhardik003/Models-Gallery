@@ -1,20 +1,21 @@
 from PIL import Image
 import streamlit as st
+from Utils.utils import *
 
 from transformers import CLIPProcessor, CLIPModel
 
-def CLIP_wrapper(uploaded_file):
+def CLIP_wrapper(uploaded_file, model):
 
     task = st.selectbox("Select the task",
-                        ("None","Image Classification", "Image Captioning"), on_change=print("Changing task"), key="clip_task")
+                        ("None","Image Classification", "Image Captioning"), on_change=clear_ada_cache(model), key="clip_task")
     if task == "Image Classification":
         print("Classification using CLIP")
-        CLIP_classification_st(uploaded_file)
+        CLIP_classification_st(uploaded_file, model)
     elif task == "Image Captioning":
         print("Captioning using CLIP")
         st.write("Image Captioning")
 
-def CLIP_classification_st(uploaded_file):
+def CLIP_classification_st(uploaded_file, model):
     from transformers import CLIPProcessor, CLIPModel
     prompt1 = st.text_input(
         'Enter prompt 1', value="A photo of a ", key="prompt1_clip")
@@ -24,7 +25,7 @@ def CLIP_classification_st(uploaded_file):
     image = Image.open(uploaded_file)
     
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
-        probs = CLIP_classfication_model(image, prompt)
+        probs = CLIP_classfication_model(image, prompt, model)
         print('Sending the image to CLIP model')
 
         st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
@@ -33,7 +34,7 @@ def CLIP_classification_st(uploaded_file):
         st.markdown(":red[Please enter both the prompts]")
 
 
-def CLIP_classfication_model(image, prompt):
+def CLIP_classfication_model(image, prompt, model):
     print("hello")
     print(prompt)
     model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")

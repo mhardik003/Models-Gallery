@@ -3,18 +3,36 @@ from transformers import AutoProcessor, BlipModel
 from Utils import *
 import streamlit as st
 
-def BLIP_wrapper(uploaded_file):
+def BLIP_wrapper(uploaded_file, model):
     task = st.selectbox("Select the task",
                         ("None","Image Classification", "Image Captioning"), on_change=print("Changing task"), key="blip_task")
     if task == "Image Classification":
-
         print("Classification using CLIP")
+
     elif task == "Image Captioning":
         print("Captioning using CLIP")
         st.write("Image Captioning")
 
+def BLIP_classification_model_st(uploaded_file, prompt):
+    from transformers import AutoProcessor, BlipModel
+    prompt1 = st.text_input(
+        'Enter prompt 1', value="A photo of a ", key="prompt1_blip")
+    prompt2 = st.text_input(
+        'Enter prompt 2', value="A photo of a ", key="prompt2_blip")
+    prompt = [prompt1, prompt2]
+    image = Image.open(uploaded_file)
+    # if st.button('Send to BLIP model'):
+    if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
+        print('Sending the image to BLIP model')
+        probs = BLIP_classification_model(image, prompt)
 
-def BLIP_model(image, prompt):
+        st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
+        st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
+    else:
+        st.markdown(":red[Please enter both the prompts]")
+
+
+def BLIP_classification_model(image, prompt):
     print("hello")
     print(prompt)
     model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")

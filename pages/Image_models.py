@@ -1,10 +1,17 @@
 import streamlit as st
-from io import StringIO
-import pandas as pd
-import sys
 from Models.clip import *
 from Models.blip import *
 from PIL import Image
+import gc
+
+model=None
+gc.enable()
+
+st.set_page_config(page_title="Image Model Library", layout="wide", page_icon="💻", menu_items={
+    'About': 'https://github.com/katha-ai',
+    'Get Help': 'https://github.com/katha-ai',
+    'Report a bug': "mailto:hardik.mittal@research.iiit.ac.in "
+})
 
 uploaded_file = st.file_uploader("Choose an image", type=[
     'png', 'jpg', 'jpeg'], accept_multiple_files=False,  help='Upload an image')
@@ -25,15 +32,11 @@ if uploaded_file is not None:
 
         with ALIGN_col:
             print("hello align")
-            # clear cache from ada for all other models by checking if they are in the memory first
-            # 
             st.write('Sending the image to ALIGN model')
         with CLIP_col:
-            CLIP_wrapper(uploaded_file)
-
-
+            CLIP_wrapper(uploaded_file, model)
         with BLIP_col:
-            BLIP_wrapper(uploaded_file)
+            BLIP_wrapper(uploaded_file, model)
 
         with ALBEF_col:
             st.write('Sending the image to ALBEF model')
