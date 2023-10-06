@@ -1,7 +1,5 @@
 import streamlit as st
-from models.clip import *
-from models.blip import *
-from models.align import *
+from utils.utils import *
 from PIL import Image
 import gc
 
@@ -33,11 +31,11 @@ if uploaded_file is not None:
 
 
         with ALIGN_col:
-            ALIGN_wrapper(uploaded_file, model, processor)
+            choose_task(uploaded_file, "ALIGN")
         with CLIP_col:
-            CLIP_wrapper(uploaded_file, model, processor)
+            choose_task(uploaded_file, "CLIP")
         with BLIP_col:
-            BLIP_wrapper(uploaded_file, model, processor)
+            choose_task(uploaded_file,"BLIP")
 
         with ALBEF_col:
             st.write('Sending the image to ALBEF model')

@@ -5,35 +5,9 @@ from transformers import AlignProcessor, AlignModel
 from utils.utils import *
 import streamlit as st
 
-def ALIGN_wrapper(uploaded_file, model, processor):
-    task = st.selectbox("Select the task",
-                        ("None", "Image Classification", "Image Captioning"), on_change=clear_ada_cache(model, processor), key="align_task")
-    if task == "Image Classification":
-        print("Classification using ALIGN")
-        ALIGN_classification_st(uploaded_file, model, processor)
-    elif task == "Image Captioning":
-        print("Captioning using ALIGN")
-        st.write("Image Captioning")
-
-def ALIGN_classification_st(uploaded_file, model, processor):
-    prompt1 = st.text_input(
-        'Enter prompt 1', value="A photo of a ", key="prompt1_align")
-    prompt2 = st.text_input(
-        'Enter prompt 2', value="A photo of a ", key="prompt2_align")
-    prompt = [prompt1, prompt2]
-    image = Image.open(uploaded_file)
-    
-    if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
-        print('Sending the image to ALIGN model')
-        probs = ALIGN_classification_model(image, prompt, model, processor)
-
-        st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
-        st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
-    else:
-        st.markdown(":red[Please enter both the prompts]")
 
 
-def ALIGN_classification_model(image, prompt, model, processor):
+def ALIGN_classification_model(image, prompt):
     processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
     model = AlignModel.from_pretrained("kakaobrain/align-base")
 
@@ -48,3 +22,18 @@ def ALIGN_classification_model(image, prompt, model, processor):
     # we can take the softmax to get the label probabilities
     probs = logits_per_image.softmax(dim=1)
     return probs
+
+
+if __name__ == "__main__":
+    image_inp = input("Enter the path to the image: ")
+    image = Image.open(image_inp)
+    task = input("Choose 1 for classification and 2 for captioning: ")
+    if task == "1":
+        ALIGN_classification_model(image)
+        prompt1 = input("Enter prompt 1: ")
+        prompt2 = input("Enter prompt 2: ")
+        prompt = [prompt1, prompt2]
+    elif task == "2":
+        print("Captioning using CLIP")
+        # st.write("Image Captioning")
+    # model = CLIP_model(image, prompt)
