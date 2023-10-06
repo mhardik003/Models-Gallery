@@ -1,10 +1,12 @@
 import streamlit as st
-from Models.clip import *
-from Models.blip import *
+from models.clip import *
+from models.blip import *
+from models.align import *
 from PIL import Image
 import gc
 
 model=None
+processor = None
 gc.enable()
 
 st.set_page_config(page_title="Image Model Library", layout="wide", page_icon="💻", menu_items={
@@ -31,12 +33,11 @@ if uploaded_file is not None:
 
 
         with ALIGN_col:
-            print("hello align")
-            st.write('Sending the image to ALIGN model')
+            ALIGN_wrapper(uploaded_file, model, processor)
         with CLIP_col:
-            CLIP_wrapper(uploaded_file, model)
+            CLIP_wrapper(uploaded_file, model, processor)
         with BLIP_col:
-            BLIP_wrapper(uploaded_file, model)
+            BLIP_wrapper(uploaded_file, model, processor)
 
         with ALBEF_col:
             st.write('Sending the image to ALBEF model')

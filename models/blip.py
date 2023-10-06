@@ -1,20 +1,20 @@
 from PIL import Image
 from transformers import AutoProcessor, BlipModel
-from Utils import *
+from utils.utils import *
 import streamlit as st
 
-def BLIP_wrapper(uploaded_file, model):
+def BLIP_wrapper(uploaded_file, model, processor):
     task = st.selectbox("Select the task",
-                        ("None","Image Classification", "Image Captioning"), on_change=print("Changing task"), key="blip_task")
+                        ("None","Image Classification", "Image Captioning"), on_change=clear_ada_cache(model, processor), key="blip_task")
     if task == "Image Classification":
-        print("Classification using CLIP")
+        print("Classification using BLIP")
+        BLIP_classification_model_st(uploaded_file, model, processor)
 
     elif task == "Image Captioning":
-        print("Captioning using CLIP")
+        print("Captioning using BLIP")
         st.write("Image Captioning")
 
-def BLIP_classification_model_st(uploaded_file, prompt):
-    from transformers import AutoProcessor, BlipModel
+def BLIP_classification_model_st(uploaded_file, prompt, model, processor):
     prompt1 = st.text_input(
         'Enter prompt 1', value="A photo of a ", key="prompt1_blip")
     prompt2 = st.text_input(
@@ -24,7 +24,7 @@ def BLIP_classification_model_st(uploaded_file, prompt):
     # if st.button('Send to BLIP model'):
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
         print('Sending the image to BLIP model')
-        probs = BLIP_classification_model(image, prompt)
+        probs = BLIP_classification_model(image, prompt, model, processor)
 
         st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
         st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
@@ -32,7 +32,7 @@ def BLIP_classification_model_st(uploaded_file, prompt):
         st.markdown(":red[Please enter both the prompts]")
 
 
-def BLIP_classification_model(image, prompt):
+def BLIP_classification_model(image, prompt, model, processor):
     print("hello")
     print(prompt)
     model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")

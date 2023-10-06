@@ -1,22 +1,21 @@
 from PIL import Image
 import streamlit as st
-from Utils.utils import *
+from utils.utils import *
 
 from transformers import CLIPProcessor, CLIPModel
 
-def CLIP_wrapper(uploaded_file, model):
+def CLIP_wrapper(uploaded_file, model, processor):
 
     task = st.selectbox("Select the task",
-                        ("None","Image Classification", "Image Captioning"), on_change=clear_ada_cache(model), key="clip_task")
+                        ("None","Image Classification", "Image Captioning"), on_change=clear_ada_cache(model, processor), key="clip_task")
     if task == "Image Classification":
         print("Classification using CLIP")
-        CLIP_classification_st(uploaded_file, model)
+        CLIP_classification_st(uploaded_file, model, processor)
     elif task == "Image Captioning":
         print("Captioning using CLIP")
         st.write("Image Captioning")
 
-def CLIP_classification_st(uploaded_file, model):
-    from transformers import CLIPProcessor, CLIPModel
+def CLIP_classification_st(uploaded_file, model, processor):
     prompt1 = st.text_input(
         'Enter prompt 1', value="A photo of a ", key="prompt1_clip")
     prompt2 = st.text_input(
@@ -25,7 +24,7 @@ def CLIP_classification_st(uploaded_file, model):
     image = Image.open(uploaded_file)
     
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
-        probs = CLIP_classfication_model(image, prompt, model)
+        probs = CLIP_classfication_model(image, prompt, model, processor)
         print('Sending the image to CLIP model')
 
         st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
@@ -34,9 +33,9 @@ def CLIP_classification_st(uploaded_file, model):
         st.markdown(":red[Please enter both the prompts]")
 
 
-def CLIP_classfication_model(image, prompt, model):
-    print("hello")
-    print(prompt)
+def CLIP_classfication_model(image, prompt, model, processor):
+    # print("hello")
+    # print(prompt)
     model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     
     processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")

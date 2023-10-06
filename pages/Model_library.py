@@ -2,10 +2,10 @@ import streamlit as st
 from io import StringIO
 import pandas as pd
 import sys
-from Models.clip import *
-from Models.blip import *
+from models.clip import *
+from models.blip import *
 from PIL import Image
-from Utils import *
+from utils import *
 
 
 
