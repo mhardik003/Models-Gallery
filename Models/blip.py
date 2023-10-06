@@ -1,5 +1,18 @@
 from PIL import Image
 from transformers import AutoProcessor, BlipModel
+from Utils import *
+import streamlit as st
+
+def BLIP_wrapper(uploaded_file):
+    task = st.selectbox("Select the task",
+                        ("None","Image Classification", "Image Captioning"), on_change=print("Changing task"), key="blip_task")
+    if task == "Image Classification":
+
+        print("Classification using CLIP")
+    elif task == "Image Captioning":
+        print("Captioning using CLIP")
+        st.write("Image Captioning")
+
 
 def BLIP_model(image, prompt):
     print("hello")
