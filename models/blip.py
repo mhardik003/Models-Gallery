@@ -5,8 +5,8 @@ import streamlit as st
 
 
 def BLIP_classification_model(image, prompt):
-    print("hello")
-    print(prompt)
+    # print("hello")
+    # print(prompt)
     model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")
     processor = AutoProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
     inputs = processor(text=prompt, images=image, return_tensors="pt", padding=True)

@@ -22,7 +22,7 @@ def choose_task(uploaded_file, model_type):
     Function to choose the task
     """
     task = st.selectbox("Select the task",
-                        ("None", "Image Classification", "Image Captioning"), on_change=print(f'Changing taks for {model_type}'), key=model_type+"_task")
+                        ("None", "Image Classification", "Image Captioning"), key=model_type+"_task")
     if task == "Image Classification":
         # print("Classification using "+model_type)
         get_classification_prompts(uploaded_file, model_type)
@@ -44,8 +44,6 @@ def get_classification_prompts(uploaded_file, model_type):
         
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
         probs = classification_models(image, prompt, model_type)
-        print('Sending the image to CLIP model')
-
         st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
         st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
     else:
@@ -63,11 +61,15 @@ def classification_models(image, prompt, model_type):
     clear_ada_cache(model, processor)
 
     if model_type=="ALIGN":
+        print("Loading ALIGN classification model")
         return ALIGN_classification_model(image, prompt)
     
     elif model_type=="CLIP":
+        print ("Loading CLIP classification model")
+        st.spinner("Loading CLIP classification model")
         return CLIP_classification_model(image, prompt)
     
     elif model_type=="BLIP":
+        print ("Loading BLIP classification model")
         return BLIP_classification_model(image, prompt)
     

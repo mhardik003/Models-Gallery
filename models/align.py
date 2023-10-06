@@ -5,8 +5,6 @@ from transformers import AlignProcessor, AlignModel
 from utils.utils import *
 import streamlit as st
 
-
-
 def ALIGN_classification_model(image, prompt):
     processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
     model = AlignModel.from_pretrained("kakaobrain/align-base")
