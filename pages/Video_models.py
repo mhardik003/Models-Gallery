@@ -23,9 +23,9 @@ if uploaded_file is not None:
             # st.write('Sending the video to VideoCLIP model')
             choose_vid_task(uploaded_file, "VideoCLIP")            
         with CLIP4Clip_col:
-            st.write('Sending the video to CLIP4Clip model')
+            choose_vid_task(uploaded_file, "CLIP4CLIP")            
         with XCLIP_col:
-            st.write('Sending the video to XCLIP model')
+            choose_vid_task(uploaded_file, "XCLIP")            
         with CLIP_ViP_col:
             st.write('Sending the video to CLIP_ViP model')
         with ViFi_CLIP_col:

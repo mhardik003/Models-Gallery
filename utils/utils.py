@@ -5,6 +5,7 @@ from models.clip import *
 from models.blip import *
 from models.align import *
 from models.clip4clip import *
+from models.xclip import *
 
 
 def clear_ada_cache(model, processor):
@@ -122,14 +123,15 @@ def vid_cls_models(video, prompt, model_type):
 
     if model_type=="CLIP4CLIP":
         print("Loading CLIP4CLIP classification model")
+        st.spinner("Loading CLIP4CLIP classification model")
         return CLIP4CLIP_classification_model(video, prompt)
     
-    elif model_type=="CLIP":
-        print ("Loading CLIP classification model")
-        st.spinner("Loading CLIP classification model")
-        return CLIP_classification_model(image, prompt)
+    elif model_type=="XCLIP":
+        print ("Loading XCLIP classification model")
+        st.spinner("Loading XCLIP classification model")
+        return XCLIP_classification_model(video, prompt)
     
     elif model_type=="BLIP":
         print ("Loading BLIP classification model")
-        return BLIP_classification_model(image, prompt)
+        return BLIP_classification_model(video, prompt)
     

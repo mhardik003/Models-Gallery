@@ -9,6 +9,7 @@ from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normal
 from PIL import Image
 import cv2
 import numpy as np
+import tempfile
 
 def preprocess(size, n_px):
         return Compose([
@@ -81,9 +82,12 @@ def CLIP4CLIP_classification_model(video, prompt):
     args : video, list of prompts
     returns : prob for each prompt
     """
+
+    tfile = tempfile.NamedTemporaryFile(delete=False)
+    tfile.write(video.read())
     #encoding text and vid
     text_emb_list = [encode_text(i) for i in prompt]
-    vid_emb = encode_video(video)
+    vid_emb = encode_video(tfile.name)
 
     text_emb = torch.tensor(text_emb_list).squeeze(1)
     sim_vector = text_emb@vid_emb
