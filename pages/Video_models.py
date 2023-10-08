@@ -1,5 +1,7 @@
 import streamlit as st
-
+from utils.utils import *
+from PIL import Image
+import gc
 
 uploaded_file = st.file_uploader("Choose a video", type=[
     'mp4'], accept_multiple_files=False,  help='Upload a video')
@@ -18,7 +20,8 @@ if uploaded_file is not None:
             ["VideoCLIP", "CLIP4Clip", "XCLIP", "CLIP-ViP", "ViFi-CLIP"])
 
         with VideoCLIP_col:
-            st.write('Sending the video to VideoCLIP model')
+            # st.write('Sending the video to VideoCLIP model')
+            choose_vid_task(uploaded_file, "VideoCLIP")            
         with CLIP4Clip_col:
             st.write('Sending the video to CLIP4Clip model')
         with XCLIP_col:
@@ -29,3 +32,4 @@ if uploaded_file is not None:
             st.write('Sending the video to ViFi_CLIP model')
 
 # st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
+
