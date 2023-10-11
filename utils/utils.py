@@ -6,6 +6,7 @@ from models.blip import *
 from models.align import *
 from models.clip4clip import *
 from models.xclip import *
+from models.blip2 import *
 
 
 def clear_ada_cache(model, processor):
@@ -28,19 +29,52 @@ def choose_task(uploaded_file, model_type):
     Function to choose the task
     """
     task = st.selectbox("Select the task",
-                        ("None", "Image Classification", "Image Captioning"), key=model_type+"_task")
+                        ("None", "Image Classification", "Image Captioning", "Question Answering"), key=model_type+"_task")
     if task == "Image Classification":
         # print("Classification using "+model_type)
         get_classification_prompts(uploaded_file, model_type)
     elif task == "Image Captioning":
         print("Captioning using "+model_type)
         st.write("Image Captioning")
+    elif task== "Question Answering":
+        print("Question Answering using "+model_type)
+        get_answer(uploaded_file, model_type)
+
+
+def get_answer(uploaded_file, model_type):
+    """
+    Function to get the answer
+    """
+    question = st.text_input(
+        'Enter question', value="What is the name of the ", key=model_type+"question")
+    image = Image.open(uploaded_file)
+        
+    if (question != "" and question != "What is the name of the "):
+        answer = question_answering_models(image, question, model_type)
+        st.write("Answer: ", answer)
+    else:
+        st.markdown(":red[Please enter the question]")
+
+def question_answering_models(image, question, model_type):
+    """
+    Function to run the classification models
+    """
+    gc.enable()
+    model = None
+    processor = None
+    clear_ada_cache(model, processor)
+
+    if model_type=="BLIPv2":
+        print("Loading BLIPv2 classification model")
+        return BLIP2_Question_Answering_Model(image, question)
+
 
 
 def get_classification_prompts(uploaded_file, model_type):
     """
     Function to get the classification prompts
     """
+
     prompt1 = st.text_input(
         'Enter prompt 1', value="A photo of a ", key=model_type+"prompt1")
     prompt2 = st.text_input(
@@ -50,7 +84,7 @@ def get_classification_prompts(uploaded_file, model_type):
     image = Image.open(uploaded_file)
         
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
-        probs = classification_models(video, prompt, model_type)
+        probs = classification_models(image, prompt, model_type)
         st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
         st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
     else:
@@ -77,6 +111,10 @@ def classification_models(image, prompt, model_type):
     elif model_type=="BLIP":
         print ("Loading BLIP classification model")
         return BLIP_classification_model(image, prompt)
+    
+    elif model_type=="BLIPv2":
+        print ("Loading BLIPv2 classification model")
+        return BLIP2_classification_Model(image, prompt)
     
 #------------------------------------------------------------------------------------------------------------------------
                                             #VIDEO HELPERS

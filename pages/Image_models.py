@@ -16,6 +16,8 @@ st.set_page_config(page_title="Image Model Library", layout="wide", page_icon="ð
 uploaded_file = st.file_uploader("Choose an image", type=[
     'png', 'jpg', 'jpeg'], accept_multiple_files=False,  help='Upload an image')
 
+st.text("README here")
+
 if uploaded_file is not None:
     left_col, right_col = st.columns(2, gap="large")
     with left_col:
@@ -40,6 +42,6 @@ if uploaded_file is not None:
         with ALBEF_col:
             st.write('Sending the image to ALBEF model')
         with BLIPv2_col:
-            st.write('Sending the image to BLIPv2 model')
+            choose_task(uploaded_file,"BLIPv2")
         with GLIP_col:
             st.write('Sending the image to GLIP model')
