@@ -17,7 +17,7 @@ if uploaded_file is not None:
         # VideoCLIP, CLIP4Clip, XCLIP, CLIP-ViP, ViFi-CLIP
 
         VideoCLIP_col, CLIP4Clip_col, XCLIP_col, CLIP_ViP_col, ViFi_CLIP_col = st.tabs(
-            ["VideoCLIP", "CLIP4Clip", "XCLIP", "CLIP-ViP", "ViFi-CLIP"])
+            ["VideoCLIP", "CLIP4Clip", "XCLIP", "CLIP-ViP", "VIFICLIP"])
 
         with VideoCLIP_col:
             # st.write('Sending the video to VideoCLIP model')
@@ -29,7 +29,7 @@ if uploaded_file is not None:
         with CLIP_ViP_col:
             st.write('Sending the video to CLIP_ViP model')
         with ViFi_CLIP_col:
-            st.write('Sending the video to ViFi_CLIP model')
+            choose_vid_task(uploaded_file, "VIFICLIP")            
 
 # st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
 

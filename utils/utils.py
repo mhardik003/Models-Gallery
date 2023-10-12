@@ -1,3 +1,5 @@
+# import sys
+# sys.path.insert(0, "/home2/manugaur/vlm_models/ViFi-CLIP")
 import streamlit as st
 import gc
 from PIL import Image
@@ -6,6 +8,7 @@ from models.blip import *
 from models.align import *
 from models.clip4clip import *
 from models.xclip import *
+from models.vifi_clip import *
 
 
 def clear_ada_cache(model, processor):
@@ -51,8 +54,8 @@ def get_classification_prompts(uploaded_file, model_type):
         
     if (prompt1 != "" and prompt2 != "" and prompt1 != "A photo of a " and prompt2 != "A photo of a "):
         probs = classification_models(video, prompt, model_type)
-        st.write("Probability of prompt 1: ", probs.detach().numpy()[0][0])
-        st.write("Probability of prompt 2: ", probs.detach().numpy()[0][1])
+        st.write("Probability of prompt 1: ","{:.2f}".format(probs.detach().numpy()[0][0]))
+        st.write("Probability of prompt 2: ","{:.2f}".format(probs.detach().numpy()[0][1]))
     else:
         st.markdown(":red[Please enter both the prompts]")
 
@@ -130,6 +133,10 @@ def vid_cls_models(video, prompt, model_type):
         print ("Loading XCLIP classification model")
         st.spinner("Loading XCLIP classification model")
         return XCLIP_classification_model(video, prompt)
+    elif model_type=="VIFICLIP":
+        print ("Loading VIFI-CLIP classification model")
+        st.spinner("Loading VIFI-CLIP classification model")
+        return VIFICLIP_classification_model(video, prompt)
     
     elif model_type=="BLIP":
         print ("Loading BLIP classification model")
