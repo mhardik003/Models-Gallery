@@ -3,3 +3,5 @@
 <br>
 
 **For opening gnode in vs code** : ssh -J hardik.mittal@ada gnode053
+
+export PATH="$HOME/.local/bin:$PATH"
