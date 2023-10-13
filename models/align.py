@@ -1,15 +1,17 @@
-import requests
-import torch
-from PIL import Image
-from transformers import AlignProcessor, AlignModel
 from utils.utils import *
-import streamlit as st
+
 
 def ALIGN_classification_model(image, prompt):
-    processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
-    model = AlignModel.from_pretrained("kakaobrain/align-base")
+    
+    import torch
+    from transformers import AlignProcessor, AlignModel
+    
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    inputs = processor(text=prompt, images=image, return_tensors="pt")
+    processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
+    model = AlignModel.from_pretrained("kakaobrain/align-base").to(device)  
+
+    inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
 
     with torch.no_grad():
         outputs = model(**inputs)
@@ -19,6 +21,7 @@ def ALIGN_classification_model(image, prompt):
 
     # we can take the softmax to get the label probabilities
     probs = logits_per_image.softmax(dim=1)
+    probs = probs.detach().numpy()
     return probs
 
 

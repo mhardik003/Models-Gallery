@@ -1,12 +1,10 @@
-import requests
-import torch
-from PIL import Image
-from transformers import Blip2Processor, Blip2Model, AutoTokenizer
+
 from utils.utils import *
-import streamlit as st
 
 def BLIP2_Question_Answering_Model(image, prompt):
     
+    import torch
+    from transformers import Blip2Processor, Blip2Model, AutoTokenizer
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7B")

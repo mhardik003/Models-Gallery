@@ -1,0 +1,14 @@
+{
+    "image":
+        {
+            "Image Classification" : ["ALBEF", "ALIGN", "BLIP", "BLIPv2","CLIP","GLIP" ],
+            "Image Captioning" : ["CLIP"], 
+            "Image Question Answering" : ["CLIP"]
+        },
+    "video":{
+        
+            "Video Classification" : ["CLIP"],
+            "Video Question Answering" : ["CLIP"]
+        
+    }
+}

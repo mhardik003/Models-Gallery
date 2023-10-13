@@ -1,13 +1,12 @@
-from PIL import Image
-import streamlit as st
 from utils.utils import *
 import os
 import numpy as np
-import torch
-from decord import VideoReader, cpu
-from huggingface_hub import hf_hub_download
-from PIL import Image
-from transformers import XCLIPProcessor, XCLIPModel
+
+def import_modules_for_xclip():
+    from huggingface_hub import hf_hub_download
+    import torch
+    from decord import VideoReader, cpu
+    from transformers import XCLIPProcessor, XCLIPModel
 
 
 def sample_frame_indices(clip_len, frame_sample_rate, seg_len):
@@ -24,6 +23,9 @@ def XCLIP_classification_model(video, prompt):
     args : video, list of prompts
     returns : prob for each prompt
     """
+
+    import_modules_for_xclip()
+
     #encoding text and vid
     vr = VideoReader(video, num_threads=1, ctx=cpu(0))
     indices = sample_frame_indices(clip_len=8, frame_sample_rate=1, seg_len=len(vr))

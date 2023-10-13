@@ -1,12 +1,12 @@
-from PIL import Image
-from transformers import AutoProcessor, BlipModel
 from utils.utils import *
-import streamlit as st
 
 
 def BLIP_classification_model(image, prompt):
     # print("hello")
     # print(prompt)
+    import torch
+    from transformers import AutoProcessor, BlipModel
+    
     model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")
     processor = AutoProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
     inputs = processor(text=prompt, images=image, return_tensors="pt", padding=True)

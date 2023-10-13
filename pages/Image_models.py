@@ -1,7 +1,8 @@
-import streamlit as st
 from utils.utils import *
-from PIL import Image
-import gc
+
+
+# print(models_config)
+
 
 model=None
 processor = None
@@ -51,7 +52,6 @@ The following models are available for the following tasks:
 
 '''
 if uploaded_file is None:
-    
     st.code(readme_content, language='markdown')
 
 if uploaded_file is not None:
@@ -62,22 +62,14 @@ if uploaded_file is not None:
                     use_column_width=True)
     with right_col:
 
-        st.subheader("Select the model to run the image on")
+        st.subheader("Select the task to run the image on")
 
-        ALIGN_col, CLIP_col, BLIP_col, ALBEF_col, BLIPv2_col, GLIP_col = st.tabs(
-            ["ALIGN", "CLIP", "BLIP", "ALBEF", "BLIPv2", "GLIP"])
+        tasks = list(models_config['image'].keys())
 
-
-        with ALIGN_col:
-            choose_task(uploaded_file, "ALIGN")
-        with CLIP_col:
-            choose_task(uploaded_file, "CLIP")
-        with BLIP_col:
-            choose_task(uploaded_file,"BLIP")
-
-        with ALBEF_col:
-            st.write('Sending the image to ALBEF model')
-        with BLIPv2_col:
-            choose_task(uploaded_file,"BLIPv2")
-        with GLIP_col:
-            st.write('Sending the image to GLIP model')
+        task_tabs = tuple(tasks)
+        task_tabs = st.tabs(tasks)
+        
+        for i in range(len(tasks)):
+            with task_tabs[i]:
+                choose_model( "image", tasks[i], uploaded_file)
+            
