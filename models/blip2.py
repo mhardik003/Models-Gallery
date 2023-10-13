@@ -28,6 +28,8 @@ def BLIP2_Question_Answering_Model(image, prompt):
 
 
 def BLIP2_classification_Model(image, prompt):
+    import torch
+    from transformers import Blip2Processor, Blip2Model, AutoTokenizer
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     model  = Blip2Model.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float16)
@@ -47,6 +49,7 @@ def BLIP2_classification_Model(image, prompt):
 
     # we can take the softmax to get the label probabilities
     probs = logits_per_image.softmax(dim=1)
+    probs = probs.detach().numpy()
     return probs
 
 

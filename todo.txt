@@ -1,0 +1,7 @@
+* optimize the caching of models from home to ssd_scratch
+
+* add other models
+
+* add other tasks
+
+* add description of the models

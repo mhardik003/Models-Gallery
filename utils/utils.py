@@ -129,6 +129,11 @@ def classification_models(modality, image, prompt, model_type):
             return BLIP2_classification_Model(image, prompt)
     
 
+        else :
+            print("Model not found")
+            st.write("Model not found")
+            return [[0,0]]
+
 #------------------------------------------------------------------------------------------------------------------------
                                             #VIDEO HELPERS
 

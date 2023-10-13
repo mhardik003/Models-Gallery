@@ -13,6 +13,7 @@ def BLIP_classification_model(image, prompt):
     outputs = model(**inputs)
     logits_per_image = outputs.logits_per_image
     probs = logits_per_image.softmax(dim=1)
+    probs = probs.detach().numpy()
     return probs
 
 
