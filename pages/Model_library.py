@@ -1,5 +1,5 @@
+import streamlit as st
 from utils import *
-from global_vars import *
 
 st.set_page_config(page_title="Katha AI Model Library", layout="wide", page_icon="💻", menu_items={
     'About': 'https://github.com/katha-ai',

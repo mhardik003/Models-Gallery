@@ -1,15 +1,16 @@
 from utils.utils import *
+from PIL import Image
 
 
 def ALIGN_classification_model(image, prompt):
-    
     import torch
     from transformers import AlignProcessor, AlignModel
-    
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    image = Image.open(image)
 
     processor = AlignProcessor.from_pretrained("kakaobrain/align-base")
-    model = AlignModel.from_pretrained("kakaobrain/align-base").to(device)  
+    model = AlignModel.from_pretrained("kakaobrain/align-base").to(device)
 
     inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
 
@@ -21,7 +22,12 @@ def ALIGN_classification_model(image, prompt):
 
     # we can take the softmax to get the label probabilities
     probs = logits_per_image.softmax(dim=1)
-    probs = probs.detach().numpy()
+    if device == "cpu":
+        probs = probs.detach().numpy()
+
+    elif device == "cuda":
+        probs = probs.cpu().detach().numpy()
+
     return probs
 
 
